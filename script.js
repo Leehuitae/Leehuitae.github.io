@@ -24,4 +24,4 @@ function fetchEconomyGrowth() {
 }
 
 // 페이지 로드 시 경제성장률 데이터를 가져오도록 호출
-fetchEconomyGrowth();
+window.addEventListener("load", fetchEconomyGrowth);
