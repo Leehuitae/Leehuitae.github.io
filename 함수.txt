@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>실시간 통화량 그래프</title>
+  <style>
+    #chartContainer {
+      width: 400px;
+      height: 300px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 20px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>실시간 통화량 그래프</h1>
+  <div id="chartContainer">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    var apiKey = "4BX4ZFL6WMZMK72U";  // 알파밴티지 API 키
+    var apiUrl = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=KRW&apikey=" + apiKey;
+
+    var labels = [];
+    var data = [];
+
+    var ctx = document.getElementById("chart").getContext("2d");
+    var chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "통화량",
+          data: data,
+          backgroundColor: "#007bff"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function updateChart() {
+      fetch(apiUrl)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          var currencyVolume = data["Realtime Currency Exchange Rate"]["5. volume"]; // API 응답 데이터에서 통화량 추출
+          var time = new Date().toLocaleTimeString(); // 현재 시간
+          labels.push(time);
+          data.push(currencyVolume);
+
+          // 최대 10개의 데이터 유지
+          if (labels.length > 10) {
+            labels.shift();
+            data.shift();
+          }
+
+          chart.update();
+        })
+        .catch(function(error) {
+          console.log("API 요청 에러:", error);
+        });
+    }
+
+    setInterval(updateChart, 5000); // 5초마다 그래프 업데이트
+  </script>
+</body>
+</html>
