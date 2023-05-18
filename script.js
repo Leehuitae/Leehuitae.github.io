@@ -1,7 +1,7 @@
 // 경제성장률 데이터를 받아오고 표시하는 함수
 function displayEconomyGrowth(data) {
-  var container = document.getElementById("economy-growth");
-  container.innerHTML = "경제성장률: " + data; // 데이터를 화면에 표시하는 방식에 따라 적절히 수정
+  var container = document.getElementById("growth-rate");
+  container.textContent = "경제성장률: " + data; // 데이터를 화면에 표시하는 방식에 따라 적절히 수정
 }
 
 // 알파 밴티지 API를 통해 경제성장률 데이터를 가져오는 함수
